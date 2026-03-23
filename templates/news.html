@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>News</title>
+    <style>
+        body {
+            font-family: Arial;
+            background-color: #f4f6f8;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        .card {
+            background: white;
+            padding: 15px;
+            margin: 15px auto;
+            width: 60%;
+            border-radius: 10px;
+            box-shadow: 0px 2px 8px rgba(0,0,0,0.1);
+        }
+
+        button {
+            padding: 8px 12px;
+            border: none;
+            border-radius: 6px;
+            background-color: #007BFF;
+            color: white;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .summary-box {
+            background: #fff3cd;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px auto;
+            width: 60%;
+        }
+
+        a {
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>📰 {{ category.capitalize() }} News</h1>
+
+    <div id="summary-box" class="summary-box">
+    🧠 Summary will appear here...
+    </div>
+
+    {% if summary %}
+    <div class="summary-box">
+        <h3>🧠 AI Summary</h3>
+        <p>{{ summary }}</p>
+    </div>
+    {% endif %}
+
+    {% if articles|length == 0 %}
+    <p style="text-align:center;">No news found 😕</p>
+    {% endif %}
+
+    {% for article in articles %}
+    <div class="card">
+        <h3>{{ article.title }}</h3>
+        <p>{{ article.description or article.title }}</p>
+
+        <a href="/summarize?text={{ article.description or article.title }}&category={{ category }}">
+            <button onclick="getSummary('{{ article.description or article.title }}')">
+                Summarize
+            </button>
+        </a>
+    </div>
+    {% endfor %}
+
+    <div style="text-align:center; margin-top:20px;">
+        <a href="/">⬅ Back</a>
+    </div>
+
+    <script>
+        function getSummary(text) {
+            const box = document.getElementById("summary-box");
+
+            box.innerText = "⏳ Generating summary...";
+
+            fetch(`/api/summarize?text=${encodeURIComponent(text)}`)
+            .then(response => response.json())
+            .then(data => {
+                box.innerText = data.summary;
+            })
+            .catch(error => {
+                box.innerText = "Error generating summary";
+            });
+        }
+    </script>
+
+</body>
+</html>
