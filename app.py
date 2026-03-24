@@ -63,13 +63,13 @@ def summarize():
     text = request.args.get("text")
     category = request.args.get("category")
 
-    # ✅ Get summary
+    
     if text:
         summary = summarize_text(text)
     else:
         summary = "No text provided"
 
-    # ✅ Fetch articles again
+    
     if category == "ai":
         url = f"https://newsapi.org/v2/everything?q=artificial intelligence&apiKey={API_KEY}"
     
