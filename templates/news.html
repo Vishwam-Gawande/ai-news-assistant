@@ -52,6 +52,10 @@
     background: darkblue;
     }
 
+    button:disabled {
+    background: gray;
+    }
+    
     .summary-box {
         background: #020617;
         padding: 15px;
@@ -90,7 +94,7 @@
         <h3>{{ article.title }}</h3>
         <p>{{ article.description }}</p>
 
-        <button onclick="getSummary(`{{ article.description or article.title }}`)">
+        <button onclick="getSummary(this, `{{ article.description or article.title }}`)">
         Summarize
         </button>
     </div>
@@ -102,18 +106,30 @@
     </div>
 
     <script>
-        function getSummary(text) {
+        function getSummary(btn, text) {
             const box = document.getElementById("summary-box");
 
+            // change button text
+            btn.innerText = "Loading...";
+            btn.disabled = true;
+
+            // show loading message
             box.innerText = "⏳ Generating summary...";
 
             fetch(`/api/summarize?text=${encodeURIComponent(text)}`)
             .then(response => response.json())
             .then(data => {
                 box.innerText = data.summary;
+
+                // restore button
+                btn.innerText = "Summarize";
+                btn.disabled = false;
             })
             .catch(error => {
                 box.innerText = "Error generating summary";
+
+                btn.innerText = "Summarize";
+                btn.disabled = false;
             });
         }
     </script>
