@@ -71,7 +71,14 @@
     <div class="container">
     
 
-    <h1>📰 {{ category.capitalize() }} News</h1>
+    <h1>🧠 AI News Assistant</h1>
+    <p style="text-align:center; color:#94a3b8; margin-bottom:20px;">
+        Get real-time news with AI summaries
+    </p>
+
+    <p style="text-align:center; margin-bottom:20px">
+        Showing: <b>{{ category.capitalize() }}</b> News
+    </p>
     
 
     <div id="summary-box" class="summary-box">
@@ -101,9 +108,16 @@
 
     {% endfor %}
 
-    <div style="text-align:center; margin-top:20px;">
-        <a href="/">⬅ Back</a>
-    </div>
+    <a href="/" style="
+        display:inline-block;
+        padding:10px;
+        background:#3b82f6;
+        color:white;
+        text-decoration:none;
+        border-radius:5px;
+    ">
+    ⬅ Back to Home
+    </a>
 
     <script>
         function getSummary(btn, text) {
@@ -114,7 +128,7 @@
             btn.disabled = true;
 
             // show loading message
-            box.innerText = "⏳ Generating summary...";
+            box.innerHTML = "⏳ Generating summary...<br><small>Please wait...</small>";
 
             fetch(`/api/summarize?text=${encodeURIComponent(text)}`)
             .then(response => response.json())
@@ -133,6 +147,11 @@
             });
         }
     </script>
+    <hr style="margin-top:40px; border:0.5px solid #334155;">
+
+    <p style="text-align:center; color:#94a3b8;">
+        Built with ❤️ using Flask + AI
+    </p>
     </div>
 </body>
 </html>
